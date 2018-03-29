@@ -1,0 +1,36 @@
+from pecan import expose,redirect,response
+from webob.exc import status_map
+from router import router
+import json
+
+
+class RootController(object):
+    @expose(generic=True, template='json')
+    def _lookup(self, primary_key, *remainder):
+        student = get_student_by_primary_key(primary_key)
+        if student:
+            return student, remainder
+    def index(self):
+        print index.dict()
+
+    @index.when(method='PUT')
+    def index_put(self,**data):
+    #    import pdb;pdb.set_trace()
+        print data
+        data["method"] = "put"
+        return router(data)
+
+    @index.when(method='DELETE')
+    def index_delete(self,**data):
+        data["method"] = "delete"
+        return router(data)
+
+    @index.when(method='GET')
+    def index_get(self,**data):
+        data["method"] = "get"
+        return router(data)
+
+    @index.when(method='POST')
+    def index_post(self,**data):
+        data["method"] = "post"
+        return router(data)

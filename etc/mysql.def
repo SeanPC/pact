@@ -1,0 +1,137 @@
+create table version (
+    id int(11) primary key not null auto_increment,
+    version varchar(30) not null,
+    update_time bigint not null
+)default charset=utf8;
+create table setting (
+    id int(11) primary key not null auto_increment,
+    state int(2) not null default 1,
+    login_by_ldap int(2) not null default 1
+)default charset=utf8;
+create table pool (
+    id int(11) primary key not null auto_increment,
+    name varchar(20) not null,
+    descrip text not null
+)default charset=utf8;
+create table site (
+    id int(11) primary key not null auto_increment,
+    name varchar(20) not null,
+    descrip text not null
+)default charset=utf8;
+create table user(
+    id int(11) primary key not null auto_increment,
+    username varchar(20) not null,
+    password varchar(100) not null,
+    email varchar(30) not null,
+    status int(2) not null default 1,
+    notify int(2) not null default 1,
+    pool int(11) not null default 1,
+    date bigint,
+    login_date bigint
+)default charset=utf8;
+create table user_group (
+    id int(11) primary key not null auto_increment,
+    user_id int(11) not null,
+    group_id int(11) not null,
+    service_id int(11) not null
+)default charset=utf8;
+create table service (
+    id int(11) primary key not null auto_increment,
+    name varchar(20) not null,
+    descrip text not null,
+    status int(2) not null,
+    is_public int(2) not null default 1,
+    is_for_tc int(2) not null default 1,
+    critical int(2) not null default 0,
+    envcmd text,
+    command varchar(30) not null,
+    task_console text,
+    task_result text,
+    task_status text,
+    task_logpath text,
+    task_stop text
+)default charset=utf8;
+create table driver (
+    id int(11) primary key not null auto_increment,
+    name varchar(60) not null,
+    ip varchar(30) not null,
+    user varchar(30) not null,
+    password varchar(30) not null,
+    status int(2) not null default 1,
+    site varchar(20) not null,
+    task_count int(3) not null,
+    service_id int(11) not null
+)default charset=utf8;
+create table parameter (
+    id int(11) primary key not null auto_increment,
+    name varchar(20) not null,
+    value text,
+    is_necessary int(2) not null default 1,
+    service_id int(11) not null
+)default charset=utf8;   
+create table envfile(
+    id int(11) primary key not null auto_increment,
+    file varchar(30) not null,
+    content text,
+    service_id int(11) not null
+)default charset=utf8;  
+create table client (
+    id int(11) primary key not null auto_increment,
+    hostname varchar(100) not null,
+    ip varchar(30) not null,
+    user varchar(30) not null,
+    password varchar(30) not null,
+    status int(2) not null default 1,
+    pool int(11) not null default 1,
+    site varchar(20) not null,
+    task_id int(11) not null default 0,
+    clus_flag int(11) not null default 0,
+    user_id int(2) not null default 0
+)default charset=utf8;
+create table task(
+    id int(11) primary key not null auto_increment,
+    pid int(11) not null,
+    is_release int(2) not null default 0,
+    driver_id int(11) not null,
+    service_id int(11) not null,
+    clients text not null,
+    user_id int(11) not null,
+    start_time bigint not null,
+    end_time bigint null,
+    os varchar(100),
+    kernel varchar(100),
+    product varchar(100),
+    state int(11) not null,
+    envcmd text,
+    command text not null
+)default charset=utf8;
+create table tc(
+    id int(11) primary key not null auto_increment,
+    name varchar(100) not null,
+    state varchar(100) not null,
+    start_time bigint not null,
+    duration bigint not null,
+    end_time bigint not null,
+    task_id int(11) not null,
+    task_pid int(11) not null
+)default charset=utf8;
+create table event(
+    id int(11) primary key not null auto_increment,
+    date bigint not null,
+    level enum('info','warning','error') not null,
+    content text not null   
+)default charset=utf8;
+create table policy(
+    id int(11) primary key not null auto_increment,
+    name varchar(30) not null,
+    driver_id int(11) not null,
+    frequency text not null,
+    envcmd text,
+    command text not null    
+)default charset=utf8;
+insert into setting values (NULL,'1','1');
+insert into user_group values (NULL,1,1,'system');
+insert into pool values (NULL,'Harderning','resources for CFT-Harderning team');
+insert into site values (NULL,'ChengDu','CDC site');
+insert into user values (NULL,'yuhao.luo','202cb962ac59075b964b07152d234b70','yuhao.luo@veritas.com',1,1,1,1502975767,1502981824);
+exit
